@@ -23,7 +23,6 @@ const $ = (id) => document.getElementById(id);
 const productsGrid = $("productsGrid");
 const searchInput = $("searchInput");
 const sortSelect = $("sortSelect");
-// CORRECCIÓN: seleccionar por clase .category-filters en lugar de un id inexistente
 const categoryContainer = document.querySelector('.category-filters');
 const cartDrawer = $("cartDrawer");
 const cartOverlay = $("cartOverlay");
@@ -202,9 +201,11 @@ if (cartIconBtn) cartIconBtn.addEventListener("click", openCart);
 $("closeCartBtn")?.addEventListener("click", closeCart);
 if (cartOverlay) cartOverlay.addEventListener("click", closeCart);
 $("clearCartBtn")?.addEventListener("click", clearCart);
+
+// Checkout con WhatsApp (número nuevo)
 $("checkoutBtn")?.addEventListener("click", () => {
   if (!cart.length) { showToast("Carrito vacío"); return; }
-  const phone = "5491112345678"; // número real
+  const phone = "5491166010902";   // +54 9 11 6601-0902
   let msg = "Hola MOTOR ALMA, quiero pedir:%0A";
   cart.forEach(i => msg += `- ${i.name} x${i.quantity} $${i.price.toLocaleString()}%0A`);
   msg += `%0ATotal: $${getTotal().toLocaleString()}`;
@@ -256,6 +257,30 @@ if (searchInput) {
 }
 if (sortSelect) sortSelect.addEventListener("change", () => renderProducts());
 window.addEventListener("popstate", () => { applyURL(); renderProducts(); });
+
+// *** NUEVO: Click en logo / nombre vuelve al inicio ***
+const logoArea = document.querySelector('.logo-area');
+if (logoArea) {
+  logoArea.addEventListener('click', (e) => {
+    e.preventDefault();
+    // Resetear estado de filtros y búsqueda
+    activeCategory = 'all';
+    searchTerm = '';
+    if (searchInput) searchInput.value = '';
+    // Actualizar chips visualmente
+    document.querySelectorAll('.filter-chip').forEach(chip => {
+      chip.classList.toggle('active', chip.dataset.category === 'all');
+    });
+    // Refrescar productos
+    renderProducts();
+    // Limpiar parámetros de la URL
+    history.pushState({}, '', window.location.pathname);
+    // Scroll suave al principio
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Cerrar carrito si está abierto
+    closeCart();
+  });
+}
 
 // Inicialización
 function init() {

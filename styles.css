@@ -59,7 +59,10 @@ html[data-theme="dark"] {
   max-width: 1300px; margin:0 auto; padding:0.8rem 2rem;
   display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;
 }
-.logo-area { display:flex; align-items:center; gap:15px; }
+.logo-area {
+  display:flex; align-items:center; gap:15px;
+  cursor: pointer; /* <-- NUEVO: indica que es clickeable */
+}
 .brand {
   font-size:1.8rem; font-weight:800; letter-spacing:-0.5px;
   background: linear-gradient(135deg, #fff 20%, #fbbf24 80%);
