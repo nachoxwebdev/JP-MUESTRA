@@ -258,26 +258,20 @@ if (searchInput) {
 if (sortSelect) sortSelect.addEventListener("change", () => renderProducts());
 window.addEventListener("popstate", () => { applyURL(); renderProducts(); });
 
-// *** NUEVO: Click en logo / nombre vuelve al inicio ***
+// Click en logo / nombre vuelve al inicio
 const logoArea = document.querySelector('.logo-area');
 if (logoArea) {
   logoArea.addEventListener('click', (e) => {
     e.preventDefault();
-    // Resetear estado de filtros y búsqueda
     activeCategory = 'all';
     searchTerm = '';
     if (searchInput) searchInput.value = '';
-    // Actualizar chips visualmente
     document.querySelectorAll('.filter-chip').forEach(chip => {
       chip.classList.toggle('active', chip.dataset.category === 'all');
     });
-    // Refrescar productos
     renderProducts();
-    // Limpiar parámetros de la URL
     history.pushState({}, '', window.location.pathname);
-    // Scroll suave al principio
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    // Cerrar carrito si está abierto
     closeCart();
   });
 }

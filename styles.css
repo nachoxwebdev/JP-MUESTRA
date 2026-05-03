@@ -61,7 +61,7 @@ html[data-theme="dark"] {
 }
 .logo-area {
   display:flex; align-items:center; gap:15px;
-  cursor: pointer; /* <-- NUEVO: indica que es clickeable */
+  cursor: pointer;
 }
 .brand {
   font-size:1.8rem; font-weight:800; letter-spacing:-0.5px;
@@ -113,7 +113,13 @@ html[data-theme="dark"] {
   color:var(--text-primary); transition:0.2s;
 }
 .search-input:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
-.category-scroll { flex:3; overflow-x:auto; white-space:nowrap; scrollbar-width:none; }
+.category-scroll {
+  flex:3;
+  overflow-x:auto;
+  white-space:nowrap;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling: touch;
+}
 .category-scroll::-webkit-scrollbar { display:none; }
 .category-filters { display:inline-flex; gap:0.6rem; }
 .filter-chip {
