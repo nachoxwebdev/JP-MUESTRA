@@ -23,7 +23,8 @@ const $ = (id) => document.getElementById(id);
 const productsGrid = $("productsGrid");
 const searchInput = $("searchInput");
 const sortSelect = $("sortSelect");
-const categoryContainer = document.querySelector('.category-filters');
+const categoryContainerDesktop = document.querySelector('#categoryFiltersDesktop');
+const categoryContainerMobile = document.querySelector('#categoryFiltersMobile');
 const cartDrawer = $("cartDrawer");
 const cartOverlay = $("cartOverlay");
 const cartItemsList = $("cartItemsList");
@@ -34,6 +35,12 @@ const scrollTopBtn = $("scrollTopBtn");
 const cartIconBtn = $("cartIconBtn");
 const themeToggle = $("themeToggle");
 const themeIcon = $("themeIcon");
+
+// Menú móvil
+const menuToggleBtn = $("menuToggleBtn");
+const mobileMenu = $("mobileMenu");
+const mobileMenuOverlay = $("mobileMenuOverlay");
+const closeMobileMenuBtn = $("closeMobileMenuBtn");
 
 // Tema
 function initTheme() {
@@ -232,18 +239,50 @@ function applyURL() {
   if (q && searchInput) { searchTerm = q; searchInput.value = q; }
 }
 
-if (categoryContainer) {
-  categoryContainer.addEventListener("click", (e) => {
-    const chip = e.target.closest(".filter-chip");
-    if (!chip) return;
-    categoryContainer.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
-    chip.classList.add("active");
-    activeCategory = chip.dataset.category;
-    renderProducts();
-    updateURL();
-  });
+// Manejo de clics en categorías (compartido para ambos contenedores)
+function handleCategoryClick(e) {
+  const chip = e.target.closest(".filter-chip");
+  if (!chip) return;
+  const category = chip.dataset.category;
+  // Actualizar todos los chips (escritorio y móvil)
+  document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
+  document.querySelectorAll(`.filter-chip[data-category="${category}"]`).forEach(c => c.classList.add("active"));
+  activeCategory = category;
+  renderProducts();
+  updateURL();
+  // Cerrar menú móvil si está abierto
+  closeMobileMenu();
 }
 
+if (categoryContainerDesktop) {
+  categoryContainerDesktop.addEventListener("click", handleCategoryClick);
+}
+if (categoryContainerMobile) {
+  categoryContainerMobile.addEventListener("click", handleCategoryClick);
+}
+
+// Menú hamburguesa móvil
+function openMobileMenu() {
+  if (mobileMenu && mobileMenuOverlay) {
+    mobileMenu.classList.add("open");
+    mobileMenuOverlay.classList.add("open");
+    mobileMenu.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+}
+function closeMobileMenu() {
+  if (mobileMenu && mobileMenuOverlay) {
+    mobileMenu.classList.remove("open");
+    mobileMenuOverlay.classList.remove("open");
+    mobileMenu.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+}
+if (menuToggleBtn) menuToggleBtn.addEventListener("click", openMobileMenu);
+if (closeMobileMenuBtn) closeMobileMenuBtn.addEventListener("click", closeMobileMenu);
+if (mobileMenuOverlay) mobileMenuOverlay.addEventListener("click", closeMobileMenu);
+
+// Búsqueda
 if (searchInput) {
   let debounceTimer;
   searchInput.addEventListener("input", (e) => {
